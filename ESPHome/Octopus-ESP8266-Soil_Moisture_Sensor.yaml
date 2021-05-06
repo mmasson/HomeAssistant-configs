@@ -1,0 +1,47 @@
+esphome:
+  name: soil-01
+  platform: ESP8266
+  board: nodemcuv2
+
+wifi:
+  ssid: "..."
+  password: "..."
+  domain: "..."
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sensor Fallback Hotspot"
+    password: "fallback"
+
+status_led:
+  pin: 
+    number: 16
+    inverted: False # We want the LED to stay on when powered
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+sensor:
+  - platform: adc
+    pin: A0
+    name: "Soil Humidity"
+    device_class: "humidity"
+    unit_of_measurement: "%"
+    icon: "mdi:humidity"
+    update_interval: 30s
+    filters:
+# Calibration
+# WIP
+# Based on https://github.com/JJSlabbert/Higrow-ESP32-WiFi-Soil-Moisture-Sensor
+#      - lambda: return x * -0.0015 + 0.7072;
+# ROUGH OBSERVATION CALIBRATION
+      - calibrate_linear:
+          - 0.42 -> 100.0
+          - 1.00 -> 0.0

@@ -1,0 +1,53 @@
+esphome:
+  name: soil-sensor-01
+  platform: ESP32
+  board: wemosbat
+
+wifi:
+  ssid: "..."
+  password: "..."
+  domain: "..."
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sensor Fallback Hotspot"
+    password: "fallback"
+    
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+sensor:
+  - platform: dht
+    model: DHT11
+    pin: 22
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+    update_interval: 60s
+  - platform: adc
+    pin: 32
+    name: "Soil Humidity"
+    device_class: "humidity"
+    unit_of_measurement: "%"
+    icon: "mdi:humidity"
+    attenuation: 11db
+    update_interval: 5s
+    filters:
+# Calibration
+# WIP
+# Based on https://github.com/JJSlabbert/Higrow-ESP32-WiFi-Soil-Moisture-Sensor
+#      - lambda: return x * -0.0015 + 0.7072;
+# ROUGH OBSERVATION CALIBRATION
+      - calibrate_linear:
+          - 3.10 -> 0.0
+          - 3.90 -> 100.0
+      - exponential_moving_average: 
+          alpha: 0.05
+          send_every: 12

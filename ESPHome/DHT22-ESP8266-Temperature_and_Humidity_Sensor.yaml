@@ -1,0 +1,39 @@
+esphome:
+  name: sensor-01
+  platform: ESP8266
+  board: thingdev
+
+status_led:
+  pin: 
+    number: 5
+    inverted: True
+
+wifi:
+  ssid: "..."
+  password: "..."
+  domain: "..."
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Sensor Fallback Hotspot"
+    password: "fallback"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+sensor:
+  - platform: dht
+    model: DHT22
+    pin: 2
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+    update_interval: 30s
